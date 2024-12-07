@@ -31,6 +31,18 @@ async function run() {
     await client.connect();
 
     const formCollection=client.db("formDB").collection("formCollection")
+    
+    app.get("/form",async(req,res)=>{
+        const cursor = formCollection.find().sort({ _id: -1 }).limit(6);
+        const result= await cursor.toArray();
+        res.send(result)
+    })
+
+    app.get("/all-visa",async(req,res)=>{
+        const cursor = formCollection.find().sort({ _id: -1 });
+        const result= await cursor.toArray();
+        res.send(result)
+    })
 
     app.post("/form",async(req,res)=>{
         const form=req.body;
