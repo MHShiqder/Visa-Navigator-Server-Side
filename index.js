@@ -31,6 +31,14 @@ async function run() {
     await client.connect();
 
     const formCollection=client.db("formDB").collection("formCollection")
+    const formCollection2=client.db("formDB").collection("formCollection2")
+
+    app.post("/apply",async(req,res)=>{
+        const form=req.body;
+        const result = await formCollection2.insertOne(form);
+        res.send(result)
+        console.log(form)
+    })
     
     app.get("/form",async(req,res)=>{
         const cursor = formCollection.find().sort({ _id: -1 }).limit(6);
@@ -56,7 +64,6 @@ async function run() {
         const form=req.body;
         const result = await formCollection.insertOne(form);
         res.send(result)
-        console.log(form)
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
