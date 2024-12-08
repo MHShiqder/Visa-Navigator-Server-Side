@@ -28,7 +28,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const formCollection=client.db("formDB").collection("formCollection")
     const formCollection2=client.db("formDB").collection("formCollection2")
@@ -56,6 +56,14 @@ async function run() {
         const id=req.params.id;
         const query={_id: new ObjectId(id)}
         const result=await formCollection.deleteOne(query)
+        res.send(result)
+    })
+
+    // delete my applied visa 
+    app.delete("/visa-application/:id",async(req,res)=>{
+        const id=req.params.id;
+        const query={_id: new ObjectId(id)}
+        const result=await formCollection2.deleteOne(query)
         res.send(result)
     })
     // update my added visa 
@@ -95,6 +103,15 @@ async function run() {
         const result=await formCollection.find(query).sort({ _id: -1 }).toArray()
         res.send(result)
     })
+    // get applied visa by a user 
+
+    app.get("/visa-application/:email",async(req,res)=>{
+        
+        const email=req.params.email;
+        const query={email: email}
+        const result=await formCollection2.find(query).sort({ _id: -1 }).toArray()
+        res.send(result)
+    })
 
     app.post("/form",async(req,res)=>{
         const form=req.body;
@@ -102,7 +119,7 @@ async function run() {
         res.send(result)
     })
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
