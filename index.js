@@ -58,6 +58,26 @@ async function run() {
         const result=await formCollection.deleteOne(query)
         res.send(result)
     })
+    // update my added visa 
+    app.put("/all-visa/:id",async(req,res)=>{
+        const id=req.params.id;
+        const data=req.body;
+        const query={_id: new ObjectId(id)}
+        const update={
+            $set:{
+                CName:data?.CName,
+                CImage:data?.CImage,
+                selectedType:data?.selectedType2,
+                PTime:data?.PTime,
+                Age:data?.Age,
+                Fee:data?.Fee,
+                Validity:data?.Validity,
+                Method:data?.Method,
+            }
+        }
+        const result=await formCollection.updateOne(query,update)
+        res.send(result)
+    })
 // get details data 
     app.get("/details/:id",async(req,res)=>{
         
