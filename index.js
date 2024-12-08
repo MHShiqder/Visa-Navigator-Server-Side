@@ -51,12 +51,28 @@ async function run() {
         const result= await cursor.toArray();
         res.send(result)
     })
-
+    // delete my added visa 
+    app.delete("/all-visa/:id",async(req,res)=>{
+        const id=req.params.id;
+        const query={_id: new ObjectId(id)}
+        const result=await formCollection.deleteOne(query)
+        res.send(result)
+    })
+// get details data 
     app.get("/details/:id",async(req,res)=>{
         
         const id=req.params.id;
         const query={_id: new ObjectId(id)}
         const result=await formCollection.findOne(query)
+        res.send(result)
+    })
+    // get added visa by a user 
+
+    app.get("/added-visa/:email",async(req,res)=>{
+        
+        const email=req.params.email;
+        const query={contributor: email}
+        const result=await formCollection.find(query).sort({ _id: -1 }).toArray()
         res.send(result)
     })
 
